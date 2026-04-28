@@ -168,7 +168,7 @@ public class GestorPedido {
 }   // Listar la lista de Pedidos, en orden que se ingresan
     public String ListarPedidos(){
         if (listaVacia()) {
-            return "lista vacia, no hay pedidos registrados";
+            return "";
         }
     String lista = "";
     NodoPedido aux = cabezaPedido;

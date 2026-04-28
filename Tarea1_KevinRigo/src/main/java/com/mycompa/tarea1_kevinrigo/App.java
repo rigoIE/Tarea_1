@@ -66,13 +66,13 @@ public class App extends Application {
                     mostrarAlerta("Duplicado", "El código ya existe.");
                 }
             } catch (Exception ex) {
-                mostrarAlerta("Error", "Revise los formatos numéricos.");
+                mostrarAlerta("Error", "Revise los formatos numéricos.");   
             }
         });
         Button btnListarPedido = new Button("Listar Pedido ingresados");
         btnListarPedido.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         btnListarPedido.setOnAction( e -> {
-            if (gestor.listaVacia()) { return;
+            if (gestor.listaVacia()) { mostrarAlerta("Error", "lista vacia, agregue pedidos"); 
             }
             txtReporte.setText(gestor.ListarPedidos());
             
@@ -80,7 +80,7 @@ public class App extends Application {
         Button btnOptimizar = new Button("Generar Lista Voraz");
         btnOptimizar.setStyle("-fx-background-color: #4910B0; -fx-text-fill: white; -fx-font-weight: bold;");
         btnOptimizar.setOnAction(e -> {
-            if (gestor.listaVacia()) return;
+            if (gestor.listaVacia()) { mostrarAlerta("Error", "no existen pedidos para generar el algoritmo"); return;}
             gestor.ordenarLista();
             gestor.algoritmoVoraz(480);
             StringBuilder sb = new StringBuilder("===== REPORTE VORAZ =====\n");
