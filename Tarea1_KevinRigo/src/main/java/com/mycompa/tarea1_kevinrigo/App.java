@@ -27,7 +27,7 @@ public class App extends Application {
         TextField txtValor = new TextField(); 
         TextField txtBono = new TextField(); 
         TextField txtPenalizacion = new TextField(); 
-
+        
         grid.add(new Label("1. Código del Pedido:"), 0, 0); grid.add(txtCodigo, 1, 0);
         grid.add(new Label("2. Tiempo Estimado (min):"), 0, 1); grid.add(txtTiempo, 1, 1);
         grid.add(new Label("3. Ganancia Asociada:"), 0, 2); grid.add(txtGanancia, 1, 2);
@@ -41,7 +41,7 @@ public class App extends Application {
         txtReporte.setPrefHeight(300);
 
         Button btnRegistrar = new Button("Registrar Pedido");
-        btnRegistrar.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
+        btnRegistrar.setStyle("-fx-background-color: #AB10B0; -fx-text-fill: white; -fx-font-weight: bold;");
         btnRegistrar.setOnAction(e -> {
             if (txtCodigo.getText().isEmpty() || txtTiempo.getText().isEmpty() || 
                 txtGanancia.getText().isEmpty() || txtValor.getText().isEmpty() || 
@@ -69,9 +69,16 @@ public class App extends Application {
                 mostrarAlerta("Error", "Revise los formatos numéricos.");
             }
         });
-
+        Button btnListarPedido = new Button("Listar Pedido ingresados");
+        btnListarPedido.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
+        btnListarPedido.setOnAction( e -> {
+            if (gestor.listaVacia()) { return;
+            }
+            txtReporte.setText(gestor.ListarPedidos());
+            
+        });
         Button btnOptimizar = new Button("Generar Lista Voraz");
-        btnOptimizar.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold;");
+        btnOptimizar.setStyle("-fx-background-color: #4910B0; -fx-text-fill: white; -fx-font-weight: bold;");
         btnOptimizar.setOnAction(e -> {
             if (gestor.listaVacia()) return;
             gestor.ordenarLista();
@@ -86,7 +93,7 @@ public class App extends Application {
             txtReporte.setText(sb.toString());
         });
 
-        HBox cajaBotones = new HBox(10, btnRegistrar, btnOptimizar);
+        HBox cajaBotones = new HBox(10, btnRegistrar, btnListarPedido,btnOptimizar);
         VBox root = new VBox(15, grid, cajaBotones, txtReporte);
         root.setPadding(new Insets(20));
 
