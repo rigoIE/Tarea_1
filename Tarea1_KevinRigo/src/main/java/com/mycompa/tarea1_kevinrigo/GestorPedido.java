@@ -64,7 +64,7 @@ public class GestorPedido {
       }
       // Se inserta el producto al final de la lista.
       public boolean insertarPedido(Pedido pedido){
-           // verificar que el nuevo pedido no se encuentre duplicado
+         // verificar que el nuevo pedido no se encuentre duplicado
      if (pedidoDuplicado(pedido.getCodigoPedido())) {
         return false;
     }
