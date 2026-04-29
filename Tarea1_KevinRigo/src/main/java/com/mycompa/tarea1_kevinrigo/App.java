@@ -20,10 +20,16 @@ public class App extends Application {
 
 while (true) {
     dialogo.showAndWait();
+    
+    String jornadaLabora = dialogo.getEditor().getText().trim();
+    
+    if (jornadaLabora.isEmpty()) {
+        System.exit(0);
+    }
 
     try {
-        int horas = Integer.parseInt(dialogo.getEditor().getText().trim());
-
+        int horas = Integer.parseInt(jornadaLabora);
+        
         if (horas > 0) {
             jornadaMinutos = horas * 60;
             break;
@@ -73,8 +79,8 @@ while (true) {
                 double bono = Double.parseDouble(txtBono.getText().trim().replace(",", "."));
                 double penal = Double.parseDouble(txtPenalizacion.getText().trim().replace(",", "."));
                 if (bono < 0 || penal < 0) {
-                 mostrarAlerta("Error", "El bono y la penalización no pueden ser negativos."); {
-                 return; }
+                 mostrarAlerta("Error", "El bono y la penalización no pueden ser negativos."); 
+                 return; 
 }
                 Pedido pedido = new Pedido(txtCodigo.getText(), Integer.parseInt(txtTiempo.getText()), 
                            Double.parseDouble(txtGanancia.getText().replace(",", ".")), cbPrioridad.getValue(), 
@@ -113,12 +119,12 @@ while (true) {
     String reporte = "===== REPORTE VORAZ =====\n\n";
     reporte += gestor.Listar(gestor.getCabezaSolucion());
 
-    reporte += "\n===== RESUMEN DEL ALGORITMO =====\n";
-    reporte += "Ganancia Total: $" + gestor.getGananciaTotal() + "\n";
-    reporte += "Entregas Puntuales: " + gestor.getCantidadEntregasPuntales() + "\n";
-    reporte += "Entregas Tardías: " + gestor.getCantidadEntregasTardias() + "\n";
-    reporte += "Penalización Total: $" + gestor.getPenalizacionTotal() + "\n";
-    reporte += "Tiempo Total Utilizado: " + gestor.getTiempoTotalUtilizado() + " minutos";
+    reporte += "\n===== RESUMEN DEL ALGORITMO =====\n" +
+             "Ganancia Total: $" + gestor.getGananciaTotal() + "\n" 
+            + "Entregas Puntuales: " + gestor.getCantidadEntregasPuntales() + "\n"
+            + "Entregas Tardías: " + gestor.getCantidadEntregasTardias() + "\n"
+            + "Penalización Total: $" + gestor.getPenalizacionTotal() + "\n"
+            + "Tiempo Total Utilizado: " + gestor.getTiempoTotalUtilizado() + " minutos";
 
     txtReporte.setText(reporte);
 });
