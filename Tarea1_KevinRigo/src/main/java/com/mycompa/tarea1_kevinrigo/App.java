@@ -52,15 +52,15 @@ public class App extends Application {
             try {
                 double bono = Double.parseDouble(txtBono.getText().trim().replace(",", "."));
                 double penal = Double.parseDouble(txtPenalizacion.getText().trim().replace(",", "."));
-                if (bono > 0 && penal > 0) {
-                    mostrarAlerta("Error de Lógica", "No puede tener bono y penalización.");
-                    return;
-                }
-                Pedido p = new Pedido(txtCodigo.getText(), Integer.parseInt(txtTiempo.getText()), 
+                if (bono < 0 || penal < 0) {
+                 mostrarAlerta("Error", "El bono y la penalización no pueden ser negativos."); {
+                 return; }
+}
+                Pedido pedido = new Pedido(txtCodigo.getText(), Integer.parseInt(txtTiempo.getText()), 
                            Double.parseDouble(txtGanancia.getText().replace(",", ".")), cbPrioridad.getValue(), 
                            Double.parseDouble(txtValor.getText().replace(",", ".")), bono, penal);
-                if (gestor.insertarProducto(p)) {
-                    txtReporte.appendText("Pedido " + p.getCodigoPedido() + " agregado.\n");
+                if (gestor.insertarPedido(pedido)) {
+                    txtReporte.appendText("Pedido " + pedido.getCodigoPedido() + " agregado.\n");
                     limpiar(txtCodigo, txtTiempo, txtGanancia, txtValor, txtBono, txtPenalizacion);
                 } else {
                     mostrarAlerta("Duplicado", "El código ya existe.");
@@ -69,31 +69,40 @@ public class App extends Application {
                 mostrarAlerta("Error", "Revise los formatos numéricos.");   
             }
         });
-        Button btnListarPedido = new Button("Listar Pedido ingresados");
-        btnListarPedido.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
-        btnListarPedido.setOnAction( e -> {
-            if (gestor.listaVacia()) { mostrarAlerta("Error", "lista vacia, agregue pedidos"); 
-            }
-            txtReporte.setText(gestor.ListarPedidos());
-            
+        Button btnListaPedidosCompleta = new Button("Lista Completa Pedidos");
+        btnListaPedidosCompleta.setStyle("-fx-background-color: #4910B0; -fx-text-fill: white; -fx-font-weight: bold;");
+        btnListaPedidosCompleta.setOnAction( e-> {
+           if (gestor.Listar(gestor.getCabezaPedido()).equalsIgnoreCase("")) {
+            mostrarAlerta("Error", "No existen pedidos para mostrar lista");
+            return;
+        }
+        String ListarPedidos = "LISTA PEDIDOS\n";
+        ListarPedidos += gestor.Listar(gestor.getCabezaPedido());
+        ListarPedidos += "\nGANANCIA TOTAL: $" +
+                   String.format("%.2f", gestor.getGananciaTotal());
+
+        txtReporte.setText(ListarPedidos);
+        
         });
         Button btnOptimizar = new Button("Generar Lista Voraz");
         btnOptimizar.setStyle("-fx-background-color: #4910B0; -fx-text-fill: white; -fx-font-weight: bold;");
         btnOptimizar.setOnAction(e -> {
-            if (gestor.listaVacia()) { mostrarAlerta("Error", "no existen pedidos para generar el algoritmo"); return;}
-            gestor.ordenarLista();
-            gestor.algoritmoVoraz(480);
-            StringBuilder sb = new StringBuilder("===== REPORTE VORAZ =====\n");
-            NodoPedido aux = gestor.getCabezaSolucion();
-            while(aux != null) {
-                sb.append(aux.getPedido().toString()).append("\n");
-                aux = aux.getSiguiente();
-            }
-            sb.append("\nGANANCIA TOTAL : $").append(String.format("%.2f", gestor.getGananciaTotal()));
-            txtReporte.setText(sb.toString());
-        });
+        if (gestor.Listar(gestor.getCabezaSolucion()).equalsIgnoreCase("")) {
+            mostrarAlerta("Error", "No existen pedidos para generar el algoritmo");
+            return;
+        }
 
-        HBox cajaBotones = new HBox(10, btnRegistrar, btnListarPedido,btnOptimizar);
+        gestor.algoritmoVoraz(480);
+
+        String reporte = "===== REPORTE VORAZ =====\n";
+        reporte += gestor.Listar(gestor.getCabezaSolucion());
+        reporte += "\nGANANCIA TOTAL: $" +
+                   String.format("%.2f", gestor.getGananciaTotal());
+
+        txtReporte.setText(reporte);
+    });
+
+        HBox cajaBotones = new HBox(10, btnRegistrar,btnOptimizar);
         VBox root = new VBox(15, grid, cajaBotones, txtReporte);
         root.setPadding(new Insets(20));
 

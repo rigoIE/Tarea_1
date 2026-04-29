@@ -49,67 +49,46 @@ public class GestorPedido {
         return cantidadEntregasPuntales;
     }
       
-      public boolean listaVacia(){ 
-          return cabezaPedido == null;
+      public boolean listaVacia(NodoPedido cabeza){ 
+          return cabeza == null;
       }
       // Se inserta el producto al final de la lista.
-      public boolean insertarProducto(Pedido pedido){
-       // Validacion del objeto Pedido, en caso de null, o no tenga un codigo de Pedido
-          if (pedido == null || pedido.getCodigoPedido().isEmpty()) {
-           return false;
-          }
+      public boolean insertarPedido(Pedido pedido){
+           // verificar que el nuevo pedido no se encuentre duplicado
+     if (pedidoDuplicado(pedido.getCodigoPedido())) {
+        return false;
+    }
       // Declaracion e inicializacion del nuevo nodoPedido
       NodoPedido nuevoPedido = new NodoPedido();
       nuevoPedido.setPedido(pedido);
       
-      // Si la lista esta vacia, el nuevoPedido es la cabeza
-          if (listaVacia()) {
+      // Si la lista esta vacia o si relacion de la cabeza es menor al del nuevo pedido
+          if (listaVacia(cabezaPedido) || cabezaPedido.getPedido().relacion() <= nuevoPedido.getPedido().relacion()) {
+          nuevoPedido.setSiguiente(cabezaPedido);
           cabezaPedido = nuevoPedido;
           return true;
           }
-      // Si la cabeza es igual nuevoPedido, no se puede agregar y retorna false
-          if (cabezaPedido.getPedido().getCodigoPedido().equalsIgnoreCase(nuevoPedido.getPedido().getCodigoPedido())) { 
-          return false;
-          }
-     
+   
       // Declaramos una variable auxiliar para recorrer la lista
       NodoPedido auxPedido = cabezaPedido;
-        while(auxPedido.getSiguiente() != null){
-            // Validacion que evita que un nuevo pedido se encuentre duplicado
-            if (auxPedido.getSiguiente().getPedido().getCodigoPedido().equalsIgnoreCase(nuevoPedido.getPedido().getCodigoPedido())) {   
-            return false;
-            }
+        while(auxPedido.getSiguiente() != null && auxPedido.getSiguiente().getPedido().relacion() >= nuevoPedido.getPedido().relacion()){
         auxPedido = auxPedido.getSiguiente();
         }
+        nuevoPedido.setSiguiente(auxPedido.getSiguiente());
         auxPedido.setSiguiente(nuevoPedido);
         return true;
         }
-      // Se ordena la lista usando el criterioVoraz que es en base a la relacion Ganancia/Tiempo
-      public boolean ordenarLista(){
-       // Validar en caso que lista este vacia retorna false;
-          if (listaVacia() || cabezaPedido.getSiguiente() == null) {
-              return false;
-          }
-       // declaramos una variable que condiciona el do-while para realizar un cambio.
-        boolean cambio;
-          do {
-         
-          cambio = false;
-         // Declaramos e inicializamos aux para recorrer la lista
-          NodoPedido aux = cabezaPedido;
-            while(aux.getSiguiente() != null){
-                 if (aux.getPedido().relacion() < aux.getSiguiente().getPedido().relacion()) {
-                   // Utilizamos una variable temp para aguardar el pedido temporal que se va a cambiar
-                   Pedido temp = aux.getPedido();
-                   aux.setPedido(aux.getSiguiente().getPedido());
-                   aux.getSiguiente().setPedido(temp);
-                   cambio = true;
-                }
-                 aux = aux.getSiguiente();
-            }
-          } while (cambio);
-      return true;
-      }
+    // Recorre la lista para evitar que se encuentre un pedido repetido o duplicado
+    public boolean pedidoDuplicado(String codigo) {
+    NodoPedido aux = cabezaPedido;
+    while (aux != null) {
+        if (aux.getPedido().getCodigoPedido().equalsIgnoreCase(codigo)) {
+            return true;
+        }
+        aux = aux.getSiguiente();
+    }
+    return false;
+}
      /* -  En este algortimo se utiliza un criterio voraz, de relacion Ganancia/tiempo, es una opcion donde se maximizan las ganacias de un pedido en relacion a tiempo y ganancia,
        a travez de un metodo dentro de la clase "Pedido" llamado relacion() que retorna un double calculando la ganancia Asociada / tiempo Estimado. 
       Usando este criterio se ordena la lista de pedidos, en el metodo ordenarLista() haciendo llamados al metodo relacion().
@@ -125,7 +104,7 @@ public class GestorPedido {
       cantidadEntregasPuntales =0;
       penalizacionTotal = 0.0;
         // en caso que lista este vacia
-          if (listaVacia()) { 
+          if (listaVacia(cabezaPedido)) { 
           return null;
           }
        
@@ -137,9 +116,9 @@ public class GestorPedido {
                     
                   int momentoFinalizacion = tiempoTotalUtilizado + aux.getPedido().getTiempoEstimado();
                   // Ganancia total += ganancia Asociada + gananciaTiempo
-                  if (momentoFinalizacion <= aux.getPedido().getTiempoEstimado()) {
+                  if (tiempoTotalUtilizado <= aux.getPedido().getTiempoEstimado()) {
                 gananciaTotal += (aux.getPedido().getGananciaAsociada() + aux.getPedido().getGananciaTiempo());
-                cantidadEntregasTardias++;
+                cantidadEntregasPuntales++;
                 }
                   // Ganancia Total += ganancia Asociada - penalizacion 
              else {
@@ -153,7 +132,7 @@ public class GestorPedido {
                 aux = aux.getSiguiente();
             }
        
-      return null;}
+      return cabezaSolucion;}
       
     public void insertarEnSolucion(Pedido p) {
     NodoPedido nuevo = new NodoPedido();
@@ -165,18 +144,18 @@ public class GestorPedido {
         while (aux.getSiguiente() != null) aux = aux.getSiguiente();
         aux.setSiguiente(nuevo);
     }
-}   // Listar la lista de Pedidos, en orden que se ingresan
-    public String ListarPedidos(){
-        if (listaVacia()) {
+}
+    // Listar la lista que desee si la del algortimo o lista de entrada pedidos.
+    public String Listar(NodoPedido cabeza){
+        if (listaVacia(cabeza)) {
             return "";
         }
     String lista = "";
-    NodoPedido aux = cabezaPedido;
+    NodoPedido aux = cabeza;
     int contadorPedido = 1;
         while (aux != null) {            
-        lista += contadorPedido + ". " + aux.getPedido().toString() + "\n";
+        lista += contadorPedido + ". Relacion: " + aux.getPedido().relacion() + " | " +aux.getPedido().toString() + "\n";
         aux = aux.getSiguiente();
         contadorPedido ++;
         }
-    return lista;} 
-}
+    return lista;} }
