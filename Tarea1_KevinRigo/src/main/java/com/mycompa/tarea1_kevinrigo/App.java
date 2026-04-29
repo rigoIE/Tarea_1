@@ -49,7 +49,7 @@ public class App extends Application {
             InterfazGraficaController controller = fxmlLoader.getController();
             controller.setJornadaMinutos(jornadaMinutos);
 
-            primaryStage.setScene(new Scene(root, 900, 600));
+            primaryStage.setScene(new Scene(root, 1200, 600));
             primaryStage.setTitle("Tarea No.1 - Algoritmo Voraz ");
             primaryStage.setResizable(true);
             primaryStage.show();
