@@ -106,7 +106,6 @@ public class GestorPedido {
       tiempo Total Utilizado, cantidad Entregas Tardias y penalizacion Total.
       */
       public NodoPedido algoritmoVoraz(int turnoDeTrabajo){
-      int tiempolimite = turnoDeTrabajo;
       cabezaSolucion = null;
       tiempoTotalUtilizado = 0;
       gananciaTotal = 0;
@@ -121,8 +120,8 @@ public class GestorPedido {
        
         NodoPedido aux = cabezaPedido; // Declaracion e inicialiacion de aux, que recorre la lista ordenada.
             while(aux != null){
-                // ---- Determina la condicion de factibilidad ---
-                if (tiempoTotalUtilizado + aux.getPedido().getTiempoEstimado() <= tiempolimite) {
+                // Determina si alcanza un nuevo pedido en relacion a la jornada
+                if (tiempoTotalUtilizado + aux.getPedido().getTiempoEstimado() <= turnoDeTrabajo) {
                 insertarEnSolucion(aux.getPedido());
                     
                   int momentoFinalizacion = tiempoTotalUtilizado + aux.getPedido().getTiempoEstimado();
@@ -145,7 +144,7 @@ public class GestorPedido {
             }
        
       return cabezaSolucion;}
-      
+   // Inserta los pedidos seleccionados del algoritmo, a la nueva lista
     public void insertarEnSolucion(Pedido p) {
     NodoPedido nuevo = new NodoPedido();
     nuevo.setPedido(p);
@@ -157,7 +156,7 @@ public class GestorPedido {
         aux.setSiguiente(nuevo);
     }
 }
-    // Listar la lista que desee si la del algortimo o lista de entrada pedidos.
+    // Listar la lista que desee, si la del algortimo o lista de entrada pedidos.
     public String Listar(NodoPedido cabeza){
         if (listaVacia(cabeza)) {
             return "";
