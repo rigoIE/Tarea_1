@@ -94,12 +94,12 @@ public class App extends Application {
 
         gestor.algoritmoVoraz(480);
 
-        String reporte = "===== REPORTE VORAZ =====\n";
-        reporte += gestor.Listar(gestor.getCabezaSolucion());
-        reporte += "\nGANANCIA TOTAL: $" +
+        String ListarSolucion = "===== REPORTE VORAZ =====\n";
+        ListarSolucion += gestor.Listar(gestor.getCabezaSolucion());
+        ListarSolucion += "\nGANANCIA TOTAL: $" +
                    String.format("%.2f", gestor.getGananciaTotal());
 
-        txtReporte.setText(reporte);
+        txtReporte.setText(ListarSolucion);
     });
 
         HBox cajaBotones = new HBox(10, btnRegistrar,btnOptimizar);
