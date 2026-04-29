@@ -9,6 +9,7 @@ public class GestorPedido {
       private int cantidadEntregasTardias;
       private int cantidadEntregasPuntales;
       private Double penalizacionTotal;
+      private int totalPedidosSeleccionados;
     // constructor
     public GestorPedido() {
         this.cabezaPedido = null;
@@ -18,6 +19,7 @@ public class GestorPedido {
         this.cantidadEntregasTardias = 0;
         this.cantidadEntregasPuntales = 0;
         this.penalizacionTotal = 0.0;
+        this.totalPedidosSeleccionados = 0;
     }
     
     // Getters de los atributos
@@ -48,7 +50,15 @@ public class GestorPedido {
     public int getCantidadEntregasPuntales() {
         return cantidadEntregasPuntales;
     }
-      
+
+    public int getTotalPedidosSeleccionados() {
+        return totalPedidosSeleccionados;
+    }
+
+    public void setTotalPedidosSeleccionados(int totalPedidosSeleccionados) {
+        this.totalPedidosSeleccionados = totalPedidosSeleccionados;
+    }
+    
       public boolean listaVacia(NodoPedido cabeza){ 
           return cabeza == null;
       }
@@ -103,6 +113,7 @@ public class GestorPedido {
       cantidadEntregasTardias = 0;
       cantidadEntregasPuntales =0;
       penalizacionTotal = 0.0;
+      totalPedidosSeleccionados = 0;
         // en caso que lista este vacia
           if (listaVacia(cabezaPedido)) { 
           return null;
@@ -129,6 +140,7 @@ public class GestorPedido {
             
             tiempoTotalUtilizado = momentoFinalizacion;
                 }
+                totalPedidosSeleccionados ++;
                 aux = aux.getSiguiente();
             }
        
@@ -154,7 +166,7 @@ public class GestorPedido {
     NodoPedido aux = cabeza;
     int contadorPedido = 1;
         while (aux != null) {            
-        lista += contadorPedido + ". Relacion: " + aux.getPedido().relacion() + " | " +aux.getPedido().toString() + "\n";
+        lista += contadorPedido + " | " +aux.getPedido().toString() +". Relacion: " + aux.getPedido().relacion() + "\n";
         aux = aux.getSiguiente();
         contadorPedido ++;
         }

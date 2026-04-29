@@ -81,7 +81,7 @@ public class Pedido {
 
     @Override
 public String toString() {
-    return "ID: " + codigoPedido + " | Tiempo: " + tiempoEstimado + " min" +" | Ganancia: $" + gananciaAsociada + " | Prioridad: " + prioridad;
+    return  codigoPedido + " | Tiempo: " + tiempoEstimado + " min" +" | Ganancia: $" + gananciaAsociada + " | Prioridad: " + prioridad;
 }
 
     

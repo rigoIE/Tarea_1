@@ -120,7 +120,8 @@ while (true) {
     reporte += gestor.Listar(gestor.getCabezaSolucion());
 
     reporte += "\n===== RESUMEN DEL ALGORITMO =====\n" +
-             "Ganancia Total: $" + gestor.getGananciaTotal() + "\n" 
+            "Total Pedidos Seleccionado " + gestor.getTotalPedidosSeleccionados()+ "\n" 
+            + "Ganancia Total: $" + gestor.getGananciaTotal() + "\n" 
             + "Entregas Puntuales: " + gestor.getCantidadEntregasPuntales() + "\n"
             + "Entregas Tardías: " + gestor.getCantidadEntregasTardias() + "\n"
             + "Penalización Total: $" + gestor.getPenalizacionTotal() + "\n"
