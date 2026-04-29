@@ -116,7 +116,7 @@ public class GestorPedido {
                     
                   int momentoFinalizacion = tiempoTotalUtilizado + aux.getPedido().getTiempoEstimado();
                   // Ganancia total += ganancia Asociada + gananciaTiempo
-                  if (tiempoTotalUtilizado <= aux.getPedido().getTiempoEstimado()) {
+                  if (momentoFinalizacion <= aux.getPedido().getTiempoEstimado()) {
                 gananciaTotal += (aux.getPedido().getGananciaAsociada() + aux.getPedido().getGananciaTiempo());
                 cantidadEntregasPuntales++;
                 }
